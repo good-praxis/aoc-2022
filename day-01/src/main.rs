@@ -21,6 +21,6 @@ fn main() {
     let biggest_meal = calories.last().unwrap();
     println!("part 1: {:?}", biggest_meal);
 
-    let all_the_cals = calories[calories.len() - 3..].into_iter().sum::<u32>();
+    let all_the_cals = calories[calories.len() - 3..].iter().sum::<u32>();
     println!("part 2: {:?}", all_the_cals);
 }
