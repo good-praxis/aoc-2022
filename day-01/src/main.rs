@@ -1,14 +1,10 @@
-use std::fs::File;
-use std::io::{prelude::*, BufReader};
+use common::*;
 
 fn main() {
-    let file = File::open("day-01/input.txt").expect("Could not open file");
-    let reader = BufReader::new(file);
-
     let mut calories: Vec<u32> = Vec::new();
     let mut temp = 0;
 
-    for line in reader.lines() {
+    for line in get_lines_from_file("day-01") {
         let line = line.unwrap();
         if line.is_empty() || line == "\n" {
             calories.push(temp);
@@ -19,8 +15,7 @@ fn main() {
     }
     calories.sort();
     let biggest_meal = calories.last().unwrap();
-    println!("part 1: {:?}", biggest_meal);
-
     let all_the_cals = calories[calories.len() - 3..].iter().sum::<u32>();
-    println!("part 2: {:?}", all_the_cals);
+
+    present_result(biggest_meal, Some(&all_the_cals));
 }

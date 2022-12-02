@@ -1,9 +1,6 @@
-use std::fs::File;
-use std::io::{prelude::*, BufReader};
+use common::*;
 
 fn main() {
-    let file = File::open("day-02/input.txt").expect("Could not open file");
-    let reader = BufReader::new(file);
     let mut score: u32 = 0;
     let mut real_score: u32 = 0;
 
@@ -74,7 +71,7 @@ fn main() {
             }
     }
 
-    for line in reader.lines() {
+    for line in get_lines_from_file("day-02") {
         let chars: Vec<char> = line.unwrap().chars().collect();
         let (enemy, player) = (chars[0], chars[2]);
         let (enemy, player) = (determine_move(enemy), determine_move(player));
@@ -82,6 +79,5 @@ fn main() {
         real_score += calc_score(&enemy, &determine_player_move(&enemy, chars[2]))
     }
 
-    println!("part 1: {}", score);
-    println!("part 2: {}", real_score);
+    present_result(score, Some(real_score));
 }
