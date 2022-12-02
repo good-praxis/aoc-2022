@@ -21,13 +21,14 @@ fn main() {
     use GameState::*;
     use RPS::*;
 
-    fn determine_move(char: char) -> Option<RPS> {
+    fn determine_move(char: char) -> RPS {
         match char {
             'A' | 'X' => Some(Rock),
             'B' | 'Y' => Some(Paper),
             'C' | 'Z' => Some(Scissors),
             _ => None,
         }
+        .unwrap()
     }
 
     fn determine_player_move(enemy: &RPS, char: char) -> RPS {
@@ -76,10 +77,7 @@ fn main() {
     for line in reader.lines() {
         let chars: Vec<char> = line.unwrap().chars().collect();
         let (enemy, player) = (chars[0], chars[2]);
-        let (enemy, player) = (
-            determine_move(enemy).unwrap(),
-            determine_move(player).unwrap(),
-        );
+        let (enemy, player) = (determine_move(enemy), determine_move(player));
         score += calc_score(&enemy, &player);
         real_score += calc_score(&enemy, &determine_player_move(&enemy, chars[2]))
     }
