@@ -20,27 +20,24 @@ fn main() {
     fn get_range(from: (usize, usize)) -> RangeInclusive<usize> {
         from.0..=from.1
     }
+    fn get_overlap() -> (usize, Option<usize>) {
+        get_lines_from_file("day-04").fold((0, Some(0)), |(mut full_overlap, mut overlap), line| {
+            let line = line.unwrap();
+            let (mut first_range, second_range) = get_ranges_from_line(&line);
+            if first_range.contains(second_range.start())
+                && first_range.contains(second_range.end())
+                || second_range.contains(first_range.start())
+                    && second_range.contains(first_range.end())
+            {
+                full_overlap += 1;
+                overlap.replace(overlap.unwrap() + 1);
+            } else if first_range.any(|i| second_range.contains(&i)) {
+                overlap.replace(overlap.unwrap() + 1);
+            }
+            (full_overlap, overlap)
+        })
+    }
 
-    let full_overlap = get_lines_from_file("day-04").fold(0, |acc, line| {
-        let line = line.unwrap();
-        let (first_range, second_range) = get_ranges_from_line(&line);
-        if first_range.contains(second_range.start()) && first_range.contains(second_range.end())
-            || second_range.contains(first_range.start())
-                && second_range.contains(first_range.end())
-        {
-            return acc + 1;
-        }
-        acc
-    });
-
-    let any_overlap = get_lines_from_file("day-04").fold(0, |acc, line| {
-        let line = line.unwrap();
-        let (mut first_range, second_range) = get_ranges_from_line(&line);
-        if first_range.any(|i| second_range.contains(&i)) {
-            return acc + 1;
-        }
-        acc
-    });
-
-    present_result(full_overlap, Some(any_overlap));
+    let (full_overlap, overlap) = get_overlap();
+    present_result(full_overlap, overlap);
 }
