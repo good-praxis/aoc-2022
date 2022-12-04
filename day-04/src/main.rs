@@ -4,8 +4,8 @@ use std::ops::RangeInclusive;
 fn main() {
     fn get_ranges_from_line(str: &str) -> (RangeInclusive<usize>, RangeInclusive<usize>) {
         // i-j,k-l
-        let ranges = str.split(',');
-        let ranges = ranges
+        let ranges = str
+            .split(',')
             .map(|range| {
                 range
                     .split('-')
