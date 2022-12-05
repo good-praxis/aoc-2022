@@ -1,10 +1,10 @@
 use common::*;
 
 fn main() {
-    fn fill_initial_stacks(input: &Vec<String>, stacks: &mut Vec<Vec<char>>) {
+    fn fill_initial_stacks(input: &[String], stacks: &mut [Vec<char>]) {
         for (i, stack) in stacks.iter_mut().enumerate() {
             for j in (0..8).rev() {
-                let char = input[j].chars().skip(1 + (i * 4)).next().unwrap();
+                let char = input[j].chars().nth(1 + (i * 4)).unwrap();
                 if !char.is_whitespace() {
                     stack.push(char);
                 }
@@ -12,7 +12,7 @@ fn main() {
         }
     }
 
-    fn get_amount_source_dest(instructions: &String) -> (usize, usize, usize) {
+    fn get_amount_source_dest(instructions: &str) -> (usize, usize, usize) {
         let split_line = instructions.split(' ').collect::<Vec<&str>>();
         let [amount, source, dest] = [split_line[1], split_line[3], split_line[5]]
             .map(str::parse::<usize>)
@@ -21,7 +21,7 @@ fn main() {
         (amount, source - 1, dest - 1)
     }
 
-    fn walk_through_9000_instructions(input: &Vec<String>, stacks: &mut Vec<Vec<char>>) {
+    fn walk_through_9000_instructions(input: &[String], stacks: &mut [Vec<char>]) {
         for line in input.iter().skip(10) {
             let (amount, source, dest) = get_amount_source_dest(line);
             for _i in 0..amount {
@@ -32,7 +32,7 @@ fn main() {
         }
     }
 
-    fn walk_through_9001_instructions(input: &Vec<String>, stacks: &mut Vec<Vec<char>>) {
+    fn walk_through_9001_instructions(input: &[String], stacks: &mut [Vec<char>]) {
         for line in input.iter().skip(10) {
             let (amount, source, dest) = get_amount_source_dest(line);
             let offset = stacks[source].len().saturating_sub(amount);
@@ -41,7 +41,7 @@ fn main() {
         }
     }
 
-    fn get_topmost(stacks: &Vec<Vec<char>>) -> String {
+    fn get_topmost(stacks: &[Vec<char>]) -> String {
         stacks.iter().fold(String::new(), |mut acc, stack| {
             acc.push(*stack.last().unwrap());
             acc
