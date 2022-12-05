@@ -8,6 +8,12 @@ pub fn get_lines_from_file(day: &str) -> Lines<BufReader<File>> {
     reader.lines()
 }
 
+pub fn get_line_vec_from_file(day: &str) -> Vec<String> {
+    get_lines_from_file(day)
+        .map(Result::unwrap)
+        .collect::<Vec<String>>()
+}
+
 pub fn present_result<T>(part1: T, part2: Option<T>)
 where
     T: Display,
