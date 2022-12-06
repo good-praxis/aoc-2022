@@ -1,5 +1,5 @@
 use common::*;
-use std::collections::{HashSet, VecDeque};
+use std::collections::HashSet;
 
 fn main() {
     let input = get_line_vec_from_file("day-06")[0].clone();
@@ -10,22 +10,17 @@ fn main() {
     present_result(start_of_package, Some(start_of_message))
 }
 
-fn get_unique_sequence_position(input: &String, len: usize) -> usize {
-    let mut history = VecDeque::new();
-    let mut set: HashSet<char> = HashSet::new();
-    let mut counter = 0;
+fn get_unique_sequence_position(input: &str, len: usize) -> usize {
+    let mut set: HashSet<u8> = HashSet::new();
+    let mut counter = len;
 
-    for c in input.chars() {
-        counter += 1;
-        if history.len() >= len {
-            history.pop_front();
-        }
-        history.push_back(c);
-        set.clear();
-        set.extend(history.iter());
+    for slice in input.as_bytes().windows(len) {
+        set.extend(slice.iter());
         if set.len() == len {
             break;
         };
+        counter += 1;
+        set.clear();
     }
 
     counter
