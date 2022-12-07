@@ -7,14 +7,18 @@ fn main() {
     let mut pwd = Vec::new();
     for line in get_lines_from_file("day-07") {
         let line = line.unwrap();
-        let command: Vec<String> = line.split(' ').map(str::to_string).collect();
-        match (command[0].as_str(), command[1].as_str()) {
-            ("$", "cd") => move_into(command[2].as_str(), &mut pwd),
-            ("$", _) => continue,
-            ("dir", dir) => {
+        let command: Vec<&str> = line.split(' ').collect();
+        match command[..] {
+            ["$", "cd", ".."] => {
+                pwd.pop();
+            }
+            ["$", "cd", dir] => pwd.push(dir.to_string()),
+            ["$", _] => continue,
+            ["dir", dir] => {
                 size_map.insert(get_path(&pwd, Some(dir)), 0);
             }
-            (size, _) => add_size_to_pwd(&mut size_map, size.parse().unwrap(), &pwd),
+            [size, _] => add_size_to_pwd(&mut size_map, size.parse().unwrap(), &pwd),
+            _ => panic!("Unexpected pattern"),
         }
     }
     let small_fries: u32 = size_map.values().filter(|v| **v <= 100000).sum();
@@ -30,14 +34,6 @@ fn main() {
     present_result(small_fries, Some(**delete_this.first().unwrap()));
 }
 
-fn move_into(dir: &str, pwd: &mut Vec<String>) {
-    match dir {
-        ".." => {
-            pwd.pop();
-        }
-        dir => pwd.push(dir.to_string()),
-    };
-}
 fn add_size_to_pwd(map: &mut HashMap<String, u32>, size: u32, pwd: &Vec<String>) {
     for i in 0..pwd.len() {
         let path = get_path(&pwd[..=i], None);
