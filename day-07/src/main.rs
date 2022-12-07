@@ -25,13 +25,13 @@ fn main() {
     let available_space = 70000000 - size_map.get("/").unwrap();
     let needed_space = 30000000 - available_space;
 
-    let mut delete_this = size_map
+    let delete_this = size_map
         .values()
         .filter(|v| **v >= needed_space)
-        .collect::<Vec<&u32>>();
-    delete_this.sort();
+        .min()
+        .unwrap();
 
-    present_result(small_fries, Some(**delete_this.first().unwrap()));
+    present_result(small_fries, Some(*delete_this));
 }
 
 fn add_size_to_pwd(map: &mut HashMap<String, u32>, size: u32, pwd: &Vec<String>) {
