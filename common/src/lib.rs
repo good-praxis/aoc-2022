@@ -1,8 +1,8 @@
 use std::fmt::Display;
 use std::fs::File;
-use std::io::{prelude::*, BufReader, Lines};
+use std::io::{prelude::*, BufReader, Error};
 
-pub fn get_lines_from_file(day: &str) -> Lines<BufReader<File>> {
+pub fn get_lines_from_file(day: &str) -> impl Iterator<Item = Result<String, Error>> {
     let file = File::open(format!("{}/input.txt", day)).expect("Could not open file");
     let reader = BufReader::new(file);
     reader.lines()
